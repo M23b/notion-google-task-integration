@@ -5,11 +5,12 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 
+
 class GoogleClient():
     def __init__(self):
-        self.service = None
+        self.service = self.set_up_service()
 
-    def set_up_service():
+    def set_up_service(self):
         #quickstart from goog api - begin
         creds = None
         # The file token.json stores the user's access and refresh tokens, and is
@@ -29,7 +30,7 @@ class GoogleClient():
             with open('token.json', 'w') as token:
                 token.write(creds.to_json())
 
-        self.service = build('tasks', 'v1', credentials=creds)
+        return build('tasks', 'v1', credentials=creds)
 
 class TaskLists():
     def __init__(self, results_json):
@@ -40,24 +41,63 @@ class TaskLists():
 
 class Tasks():
     def __init__(self, items):
-        self.kind = results_json['kind']
-        self.id = results_json['id']
-        self.etag = results_json['etag']
-        self.title = results_json['title']
-        self.updated = results_json['updated']
-        self.selfLink = results_json['selfLink']
-        self.position = results_json['position']
-        self.notes = results_json['notes']
-        self.status = results_json['status']
-        self.due = results_json['due']
 
-"""Add function to update (patch) a Task"""
-"""Add function to delete (archieve) a Task"""
+        try:
+            self.kind = items['kind']
+        except KeyError:
+            self.kind = ""
 
-    # Call the Tasks API
-    results = service.tasklists().list(maxResults=10).execute()
-    items = results.get('items', [])
-    print(items)
-    task_list = service.tasks().list(tasklist='MDgyMDQzMTQxMzIyMTgyMDcxMzI6MDow', maxResults=10).execute()
-    print("task list")
-    print(task_list)
+        try:
+            self.id = items['id']
+        except KeyError:
+            self.id = ""
+
+        try:
+            self.etag = items['etag']
+        except KeyError:
+            self.etag = ""
+
+        try:
+            self.title = items['title']
+        except KeyError:
+            self.title = ""
+
+        try:
+            self.updated = items['updated']
+        except KeyError:
+            self.updated = ""
+
+        try:
+            self.selfLink = items['selfLink']
+        except KeyError:
+            self.selfLink = ""
+
+        try:
+            self.position = items['position']
+        except KeyError:
+            self.position = ""
+
+        try:
+            self.status = items['status']
+        except KeyError:
+            self.status = ""
+
+        try:
+            self.due = items['due']
+        except KeyError:
+            self.due = ""
+
+        try:
+            self.notes = items['notes']
+        except KeyError:
+            self.notes = ""
+
+        try:
+            self.deleted = items['deleted']
+        except KeyError:
+            self.deleted = False
+"""
+gClient = GoogleClient()    # google client object
+gClient.set_up_service()
+results = gClient.service.tasks().list(tasklist='MDgyMDQzMTQxMzIyMTgyMDcxMzI6MDow', maxResults=10).execute()
+print(results)"""
