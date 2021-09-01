@@ -86,11 +86,11 @@ class Properties(Page):
         self.last_edited_time = last_edited_time
         self.archived = archived
         self.id = page_id
+        self.Task_Name = properties_data_json['Task Name']['title'][0]['plain_text']
         self.Notes = self.set_Notes(properties_data_json['Notes']['rich_text'])
         self.Due_Date = self.set_due_date(properties_data_json['Due Date'])
         self.Google_Task_ID = self.set_Google_Task_ID(properties_data_json['Google Task ID']['rich_text'])
         self.Status  = properties_data_json['Status']['checkbox']
-        self.Task_Name = properties_data_json['Task Name']['title'][0]['plain_text']
         self.page_data_json = page_data_json
         Page.__init__(self, page_data_json, integration_token)
 
@@ -99,10 +99,19 @@ class Properties(Page):
     def set_due_date(self, properties_data_due_date):
         try:
             temp_due_date = properties_data_due_date['date']
+            print("temp_due_date")
+            print(self.Task_Name)
+            print(properties_data_due_date['date'])
             ddate = temp_due_date['start']
+            print("ddate")
+            print(ddate)
         except TypeError:
+            print("error in set due date")
+            print(self.Task_Name)
             ddate = None
-        self.Due_Date = ddate
+            print("ddate")
+            print(ddate)
+        return ddate
 
     def set_Google_Task_ID(self, properties_data_json_Google_Task_ID_rich_text):
         # properties_data_json_Google_Task_ID_rich_text -> [{'type': 'text', 'text': {'content': 'VWZoX0JuSzdjWTYzWnRseQ', 'link': None}, 'annotations': {'bold': False, 'italic': False, 'strikethrough': False, 'underline': False, 'code': False, 'color': 'default'}, 'plain_text': 'VWZoX0JuSzdjWTYzWnRseQ', 'href': None}]

@@ -7,7 +7,7 @@ from getKeys import get_Keys
 
 user_keys = get_Keys()
 NOTION_DATABASE_ID = user_keys["NOTION_DATABASE_ID"]
-NOTION_INTEGRATION_TOKEN = user_keys["NOTION_DATABASE_ID"]
+NOTION_INTEGRATION_TOKEN = user_keys["NOTION_INTEGRATION_TOKEN"]
 headers = {
     'Authorization' : 'Bearer '+NOTION_INTEGRATION_TOKEN,
     'Content-Type' : "application/json",
@@ -31,7 +31,7 @@ def createNotionPage(google_id, notes, task_title, due_date, status, archived):
     createUrl = f'https://api.notion.com/v1/pages'
     #api info: https://developers.notion.com/reference/page#property-value-object
     if validate_iso8601(due_date) is False:
-        print("validate_iso8601")
+        print("validate_iso8601 is false - createNotionPage")
         newPageData = {
             "parent": {"database_id": NOTION_DATABASE_ID},
             "properties" : {
@@ -120,7 +120,7 @@ def updateNotionPage(page_id, google_id, notes, task_title, due_date, status, ar
     # have keywards to control which properties to add
     #api info: https://developers.notion.com/reference/page#property-value-object
     if validate_iso8601(due_date) is False:
-        print("validate_iso8601")
+        print("validate_iso8601 is False - updateNotionPage")
         newPageData = {
             "parent": {"database_id": NOTION_DATABASE_ID},
             "properties" : {
@@ -191,7 +191,8 @@ def updateNotionPage(page_id, google_id, notes, task_title, due_date, status, ar
 
     data = json.dumps(newPageData)
     #print(str(uploadData))
-
+    print("headers")
+    print(headers)
     results = requests.request("PATCH", createUrl, headers = headers, data=data)
     print(results.status_code)
 
